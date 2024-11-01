@@ -297,4 +297,28 @@ void sdb_table_set(SDB* sdb, const char* table, const char* key, const char* val
     sdb_save(sdb);
 }
 
+/**
+ * @brief Gets a value from the database
+ * 
+ * @param sdb The database
+ * @param table The name of the table
+ * @param key The key
+ * @return The value
+ */
+char* sdb_table_get(SDB* sdb, const char* table, const char* key) {
+    SDBTable* t = sdb_table_find(sdb, table);
+    if (t == NULL) {
+        return NULL;
+    }
+
+    SDBEntry* e = t->entries->head;
+    while (e != NULL) {
+        if (strcmp(e->key, key) == 0) {
+            return e->value;
+        }
+        e = e->next;
+    }
+    return NULL;
+}
+
 #endif

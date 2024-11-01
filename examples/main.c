@@ -11,7 +11,15 @@ int main() {
     sdb_table_set(sdb, "test", "key", "value");
     sdb_table_set(sdb, "test", "key2", "value2");
 
-    
+    printf("%s\n", sdb_table_get(sdb, "test", "key"));
+    printf("%s\n", sdb_table_get(sdb, "test", "key2"));
+
+    sdb_close(sdb);
+
+    sdb = sdb_open("test.sdb");
+    printf("%s\n", sdb_table_get(sdb, "test", "key"));
+    printf("%s\n", sdb_table_get(sdb, "test", "key2"));
+
     sdb_close(sdb);
     return 0;
 }
