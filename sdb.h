@@ -707,4 +707,35 @@ void sdb_batch_execute(SDB* sdb, SDBOperation* ops, size_t count) {
     sdb_save(sdb);
 }
 
+/**
+ * @struct sdb_info
+ * @brief The info of the database
+ * 
+ * @var magic
+ * @brief The magic number
+ * @var version
+ * @brief The version
+ * @var compress_type
+ * @brief The compression type
+ */
+struct sdb_info {
+    uint32_t magic;
+    uint32_t version;
+    SDBCompressType compress_type;
+};
+
+/**
+ * @brief Gets the info of the database
+ * 
+ * @param file The file
+ * @return The info
+ */
+struct sdb_info sdb_get_info(FILE* file) {
+    struct sdb_info info;
+    fread(&info.magic, sizeof(uint32_t), 1, file);
+    fread(&info.version, sizeof(uint32_t), 1, file);
+    fread(&info.compress_type, sizeof(SDBCompressType), 1, file);
+    return info;
+}
+
 #endif
