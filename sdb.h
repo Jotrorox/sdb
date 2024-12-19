@@ -68,6 +68,26 @@ typedef struct {
     char* value;
 } SDBOperation;
 
+typedef struct {
+    char* path;
+    SDBTable* tables;
+    int table_count;
+    SDBCompressType compress_type;
+} SDBPool;
+
+typedef struct {
+    char* path;
+    char* version;
+    SDBCompressType compress_type;
+} SDBInfo;
+
+/*******************************************************************************
+ * Function Declarations
+ ******************************************************************************/
+static void write_to_buffer(unsigned char** buffer, size_t* buffer_size, 
+                          size_t* current_size, const void* data, size_t size);
+static size_t hash_string(const char* str);
+
 /*******************************************************************************
  * Compression Functions
  ******************************************************************************/
@@ -651,6 +671,22 @@ static size_t hash_string(const char* str) {
     while ((c = *str++))
         hash = ((hash << 5) + hash) + c;
     return hash;
+}
+
+static SDBInfo sdb_info(SDB* sdb) {
+    SDBInfo info = {0};
+    if (sdb) {
+        info.path = strdup(sdb->path);
+        info.version = strdup(SDB_VERSION);
+        info.compress_type = sdb->compress_type;
+    }
+    return info;
+}
+
+void sdb_free_info(SDBInfo info) {
+    free(info.path);
+    free(info.version);
+    // Don't free compress_type as it's an enum
 }
 
 #endif
