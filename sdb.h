@@ -18,6 +18,9 @@
 #include <string.h>
 #include <stdint.h>
 
+/*******************************************************************************
+ * Constants
+ ******************************************************************************/
 #define SDB_VERSION "0.3.0"
 #define WINDOW_SIZE 1024
 #define MIN_MATCH 3
@@ -25,15 +28,49 @@
 #define SDB_MAGIC 0x53444246  // "SDBF" in ASCII
 #define SDB_FILE_VERSION 1
 
-/**
- * @brief Compression type for database storage
- */
+/*******************************************************************************
+ * Type Definitions
+ ******************************************************************************/
 typedef enum {
     SDB_COMPRESS_NONE,
     SDB_COMPRESS_RLE,
     SDB_COMPRESS_LZ77
 } SDBCompressType;
 
+typedef struct SDBEntry {
+    char *key;
+    char *value;
+    struct SDBEntry *next;
+} SDBEntry;
+
+typedef struct {
+    SDBEntry *head;
+    SDBEntry *tail;
+    size_t capacity;
+    SDBEntry** entries;
+} SDBEntryList;
+
+typedef struct {
+    char *name;
+    SDBEntryList *entries;
+} SDBTable;
+
+typedef struct {
+    char *path;
+    SDBTable *tables;
+    int table_count;
+    SDBCompressType compress_type;
+} SDB;
+
+typedef struct {
+    char* table;
+    char* key;
+    char* value;
+} SDBOperation;
+
+/*******************************************************************************
+ * Compression Functions
+ ******************************************************************************/
 /**
  * @brief Compresses data using run-length encoding
  * 
@@ -190,97 +227,9 @@ static unsigned char* lz77_decompress(const unsigned char* compressed, size_t co
     return realloc(decompressed, decom_pos);
 }
 
-/**
- * @struct SDBEntry
- * @brief A single entry in the database
- * 
- * @var key
- * @brief The key of the entry
- * @var value
- * @brief The value of the entry
- * @var next
- * @brief The next entry in the list
- */
-typedef struct SDBEntry {
-    char *key;
-    char *value;
-    struct SDBEntry *next;
-} SDBEntry;
-
-/**
- * @struct SDBEntryList
- * @brief A list of entries
- * 
- * @var head
- * @brief The head of the list
- * @var tail
- * @brief The tail of the list
- * @var capacity
- * @brief The capacity of the hash table
- * @var entries
- * @brief The entries array for hash table
- */
-typedef struct {
-    SDBEntry *head;
-    SDBEntry *tail;
-    size_t capacity;
-    SDBEntry** entries;
-} SDBEntryList;
-
-/**
- * @struct SDBTable
- * @brief A table in the database
- * 
- * @var name
- * @brief The name of the table
- * @var entries
- * @brief The list of entries in the table
- */
-typedef struct {
-    char *name;
-    SDBEntryList *entries;
-} SDBTable;
-
-/**
- * @struct SDB
- * @brief The database
- * 
- * @var path
- * @brief The path to the database file
- * @var tables
- * @brief The list of tables in the database
- * @var table_count
- * @brief The number of tables in the database
- */
-typedef struct {
-    char *path;
-    SDBTable *tables;
-    int table_count;
-    SDBCompressType compress_type;
-} SDB;
-
-/**
- * @brief Helper function to write data to a buffer with automatic resizing
- * 
- * @param buffer Pointer to buffer pointer
- * @param buffer_size Pointer to current buffer size
- * @param current_size Pointer to current data size
- * @param data Data to write
- * @param size Size of data to write
- */
-static void write_to_buffer(unsigned char** buffer, size_t* buffer_size, 
-                          size_t* current_size, const void* data, size_t size) {
-    // Check if we need to resize
-    while (*current_size + size > *buffer_size) {
-        *buffer_size *= 2;
-        *buffer = (unsigned char*)realloc(*buffer, *buffer_size);
-    }
-    
-    // Copy data to buffer
-    memcpy(*buffer + *current_size, data, size);
-    *current_size += size;
-}
-
+/*******************************************************************************
+ * Database Core Functions
+ ******************************************************************************/
 /**
  * @brief Opens a database file
  * 
@@ -528,6 +477,9 @@ void sdb_save(SDB* sdb) {
     fclose(file);
 }
 
+/*******************************************************************************
+ * Table Management Functions
+ ******************************************************************************/
 /**
  * @brief Creates a table in the database
  * 
@@ -594,20 +546,9 @@ SDBTable* sdb_table_find(SDB* sdb, const char* name) {
     return NULL;
 }
 
-typedef struct {
-    size_t capacity;
-    size_t size;
-    SDBEntry** entries;
-} SDBHashTable;
-
-static size_t hash_string(const char* str) {
-    size_t hash = 5381;
-    int c;
-    while ((c = *str++))
-        hash = ((hash << 5) + hash) + c;
-    return hash;
-}
-
+/*******************************************************************************
+ * Data Access Functions
+ ******************************************************************************/
 /**
  * @brief Sets a value in the database
  * 
@@ -668,37 +609,9 @@ char* sdb_table_get(SDB* sdb, const char* table, const char* key) {
     return NULL;
 }
 
-typedef struct MemoryBlock {
-    unsigned char* data;
-    size_t used;
-    struct MemoryBlock* next;
-} MemoryBlock;
-
-typedef struct {
-    MemoryBlock* current;
-    size_t block_size;
-} MemoryPool;
-
-static void* pool_alloc(MemoryPool* pool, size_t size) {
-    if (pool->current->used + size > pool->block_size) {
-        MemoryBlock* new_block = malloc(sizeof(MemoryBlock));
-        new_block->data = malloc(pool->block_size);
-        new_block->used = 0;
-        new_block->next = pool->current;
-        pool->current = new_block;
-    }
-    
-    void* ptr = pool->current->data + pool->current->used;
-    pool->current->used += size;
-    return ptr;
-}
-
-typedef struct {
-    char* table;
-    char* key;
-    char* value;
-} SDBOperation;
-
+/*******************************************************************************
+ * Batch Operations
+ ******************************************************************************/
 void sdb_batch_execute(SDB* sdb, SDBOperation* ops, size_t count) {
     for (size_t i = 0; i < count; i++) {
         sdb_table_set(sdb, ops[i].table, ops[i].key, ops[i].value);
@@ -707,35 +620,37 @@ void sdb_batch_execute(SDB* sdb, SDBOperation* ops, size_t count) {
     sdb_save(sdb);
 }
 
+/*******************************************************************************
+ * Utility Functions
+ ******************************************************************************/
 /**
- * @struct sdb_info
- * @brief The info of the database
+ * @brief Helper function to write data to a buffer with automatic resizing
  * 
- * @var magic
- * @brief The magic number
- * @var version
- * @brief The version
- * @var compress_type
- * @brief The compression type
+ * @param buffer Pointer to buffer pointer
+ * @param buffer_size Pointer to current buffer size
+ * @param current_size Pointer to current data size
+ * @param data Data to write
+ * @param size Size of data to write
  */
-struct sdb_info {
-    uint32_t magic;
-    uint32_t version;
-    SDBCompressType compress_type;
-};
+static void write_to_buffer(unsigned char** buffer, size_t* buffer_size, 
+                          size_t* current_size, const void* data, size_t size) {
+    // Check if we need to resize
+    while (*current_size + size > *buffer_size) {
+        *buffer_size *= 2;
+        *buffer = (unsigned char*)realloc(*buffer, *buffer_size);
+    }
+    
+    // Copy data to buffer
+    memcpy(*buffer + *current_size, data, size);
+    *current_size += size;
+}
 
-/**
- * @brief Gets the info of the database
- * 
- * @param file The file
- * @return The info
- */
-struct sdb_info sdb_get_info(FILE* file) {
-    struct sdb_info info;
-    fread(&info.magic, sizeof(uint32_t), 1, file);
-    fread(&info.version, sizeof(uint32_t), 1, file);
-    fread(&info.compress_type, sizeof(SDBCompressType), 1, file);
-    return info;
+static size_t hash_string(const char* str) {
+    size_t hash = 5381;
+    int c;
+    while ((c = *str++))
+        hash = ((hash << 5) + hash) + c;
+    return hash;
 }
 
 #endif
