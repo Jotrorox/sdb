@@ -1,7 +1,7 @@
 /**
  * @file sdb.h
  * @brief Simple Database Library
- * @version 0.3.0
+ * @version 0.4.0
  * 
  * This is a simple database library that is used to store data in a file.
  * It is not meant to be a full-featured database, but rather a simple way to store data.
@@ -21,7 +21,7 @@
 /*******************************************************************************
  * Constants
  ******************************************************************************/
-#define SDB_VERSION "0.3.0"
+#define SDB_VERSION "0.4.0"
 #define WINDOW_SIZE 1024
 #define MIN_MATCH 3
 #define POOL_BLOCK_SIZE 4096
