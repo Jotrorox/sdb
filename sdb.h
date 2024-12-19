@@ -1,7 +1,7 @@
 /**
  * @file sdb.h
  * @brief Simple Database Library
- * @version 0.1.0
+ * @version 0.2.0
  * 
  * This is a simple database library that is used to store data in a file.
  * It is not meant to be a full-featured database, but rather a simple way to store data.
@@ -17,7 +17,78 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define SDB_VERSION "0.1.0"
+#define SDB_VERSION "0.2.0"
+
+/**
+ * @brief Compresses data using run-length encoding
+ * 
+ * @param data Input data to compress
+ * @param data_len Length of input data
+ * @param out_len Pointer to store compressed length
+ * @return Compressed data buffer
+ */
+static unsigned char* rle_compress(const unsigned char* data, size_t data_len, size_t* out_len) {
+    if (!data || data_len == 0) return NULL;
+    
+    // Allocate worst case size (input size * 2)
+    unsigned char* compressed = (unsigned char*)malloc(data_len * 2);
+    if (!compressed) return NULL;
+    
+    size_t comp_pos = 0;
+    size_t pos = 0;
+    
+    while (pos < data_len) {
+        unsigned char count = 1;
+        unsigned char current = data[pos];
+        
+        while (pos + count < data_len && 
+               data[pos + count] == current && 
+               count < 255) {
+            count++;
+        }
+        
+        compressed[comp_pos++] = count;
+        compressed[comp_pos++] = current;
+        pos += count;
+    }
+    
+    *out_len = comp_pos;
+    return realloc(compressed, comp_pos); // Shrink to actual size
+}
+
+/**
+ * @brief Decompresses RLE compressed data
+ * 
+ * @param compressed Compressed input data
+ * @param comp_len Length of compressed data
+ * @param out_len Pointer to store decompressed length
+ * @return Decompressed data buffer
+ */
+static unsigned char* rle_decompress(const unsigned char* compressed, size_t comp_len, size_t* out_len) {
+    if (!compressed || comp_len == 0) return NULL;
+    
+    // First pass: calculate decompressed size
+    size_t decom_size = 0;
+    for (size_t i = 0; i < comp_len; i += 2) {
+        decom_size += compressed[i];
+    }
+    
+    unsigned char* decompressed = (unsigned char*)malloc(decom_size);
+    if (!decompressed) return NULL;
+    
+    size_t pos = 0;
+    for (size_t i = 0; i < comp_len; i += 2) {
+        unsigned char count = compressed[i];
+        unsigned char value = compressed[i + 1];
+        
+        for (unsigned char j = 0; j < count; j++) {
+            decompressed[pos++] = value;
+        }
+    }
+    
+    *out_len = decom_size;
+    return decompressed;
+}
 
 /**
  * @struct SDBEntry
@@ -82,6 +153,28 @@ typedef struct {
 } SDB;
 
 /**
+ * @brief Helper function to write data to a buffer with automatic resizing
+ * 
+ * @param buffer Pointer to buffer pointer
+ * @param buffer_size Pointer to current buffer size
+ * @param current_size Pointer to current data size
+ * @param data Data to write
+ * @param size Size of data to write
+ */
+static void write_to_buffer(unsigned char** buffer, size_t* buffer_size, 
+                          size_t* current_size, const void* data, size_t size) {
+    // Check if we need to resize
+    while (*current_size + size > *buffer_size) {
+        *buffer_size *= 2;
+        *buffer = (unsigned char*)realloc(*buffer, *buffer_size);
+    }
+    
+    // Copy data to buffer
+    memcpy(*buffer + *current_size, data, size);
+    *current_size += size;
+}
+
+/**
  * @brief Opens a database file
  * 
  * @param path The path to the database file
@@ -97,59 +190,84 @@ SDB* sdb_open(const char* path) {
     sdb->tables = NULL;
     sdb->table_count = 0;
 
-    // Try to open existing database file
     FILE* file = fopen(path, "rb");
     if (file != NULL) {
-        // Read table count
-        fread(&sdb->table_count, sizeof(int), 1, file);
+        // Read compressed data
+        size_t compressed_size, original_size;
+        fread(&compressed_size, sizeof(size_t), 1, file);
+        fread(&original_size, sizeof(size_t), 1, file);
         
-        if (sdb->table_count > 0) {
-            sdb->tables = (SDBTable*)malloc(sizeof(SDBTable) * sdb->table_count);
+        unsigned char* compressed = (unsigned char*)malloc(compressed_size);
+        fread(compressed, 1, compressed_size, file);
+        
+        // Decompress data
+        size_t decompressed_size;
+        unsigned char* buffer = rle_decompress(compressed, compressed_size, &decompressed_size);
+        free(compressed);
+        
+        if (buffer && decompressed_size == original_size) {
+            size_t pos = 0;
             
-            // Read each table
-            for (int i = 0; i < sdb->table_count; i++) {
-                int name_len;
-                fread(&name_len, sizeof(int), 1, file);
+            // Read table count
+            memcpy(&sdb->table_count, buffer + pos, sizeof(int));
+            pos += sizeof(int);
+            
+            if (sdb->table_count > 0) {
+                sdb->tables = (SDBTable*)malloc(sizeof(SDBTable) * sdb->table_count);
                 
-                sdb->tables[i].name = (char*)malloc(name_len + 1);
-                fread(sdb->tables[i].name, 1, name_len, file);
-                sdb->tables[i].name[name_len] = '\0';
-                
-                sdb->tables[i].entries = (SDBEntryList*)malloc(sizeof(SDBEntryList));
-                sdb->tables[i].entries->head = NULL;
-                sdb->tables[i].entries->tail = NULL;
-                
-                // Read entries
-                int entry_count;
-                fread(&entry_count, sizeof(int), 1, file);
-                
-                SDBEntry* current = NULL;
-                for (int j = 0; j < entry_count; j++) {
-                    SDBEntry* entry = (SDBEntry*)malloc(sizeof(SDBEntry));
+                // Read each table
+                for (int i = 0; i < sdb->table_count; i++) {
+                    int name_len;
+                    memcpy(&name_len, buffer + pos, sizeof(int));
+                    pos += sizeof(int);
                     
-                    int key_len, value_len;
-                    fread(&key_len, sizeof(int), 1, file);
-                    fread(&value_len, sizeof(int), 1, file);
+                    sdb->tables[i].name = (char*)malloc(name_len + 1);
+                    memcpy(sdb->tables[i].name, buffer + pos, name_len);
+                    pos += name_len;
+                    sdb->tables[i].name[name_len] = '\0';
                     
-                    entry->key = (char*)malloc(key_len + 1);
-                    entry->value = (char*)malloc(value_len + 1);
+                    sdb->tables[i].entries = (SDBEntryList*)malloc(sizeof(SDBEntryList));
+                    sdb->tables[i].entries->head = NULL;
+                    sdb->tables[i].entries->tail = NULL;
                     
-                    fread(entry->key, 1, key_len, file);
-                    fread(entry->value, 1, value_len, file);
+                    // Read entries
+                    int entry_count;
+                    memcpy(&entry_count, buffer + pos, sizeof(int));
+                    pos += sizeof(int);
                     
-                    entry->key[key_len] = '\0';
-                    entry->value[value_len] = '\0';
-                    entry->next = NULL;
-                    
-                    if (current == NULL) {
-                        sdb->tables[i].entries->head = entry;
-                    } else {
-                        current->next = entry;
+                    SDBEntry* current = NULL;
+                    for (int j = 0; j < entry_count; j++) {
+                        SDBEntry* entry = (SDBEntry*)malloc(sizeof(SDBEntry));
+                        
+                        int key_len, value_len;
+                        memcpy(&key_len, buffer + pos, sizeof(int));
+                        pos += sizeof(int);
+                        memcpy(&value_len, buffer + pos, sizeof(int));
+                        pos += sizeof(int);
+                        
+                        entry->key = (char*)malloc(key_len + 1);
+                        entry->value = (char*)malloc(value_len + 1);
+                        
+                        memcpy(entry->key, buffer + pos, key_len);
+                        pos += key_len;
+                        memcpy(entry->value, buffer + pos, value_len);
+                        pos += value_len;
+                        
+                        entry->key[key_len] = '\0';
+                        entry->value[value_len] = '\0';
+                        entry->next = NULL;
+                        
+                        if (current == NULL) {
+                            sdb->tables[i].entries->head = entry;
+                        } else {
+                            current->next = entry;
+                        }
+                        current = entry;
                     }
-                    current = entry;
+                    sdb->tables[i].entries->tail = current;
                 }
-                sdb->tables[i].entries->tail = current;
             }
+            free(buffer);
         }
         fclose(file);
     }
@@ -163,6 +281,32 @@ SDB* sdb_open(const char* path) {
  * @param sdb The database
  */
 void sdb_close(SDB* sdb) {
+    if (!sdb) return;
+
+    // Free all tables and their entries
+    for (int i = 0; i < sdb->table_count; i++) {
+        // Free all entries in the table
+        SDBEntry* current = sdb->tables[i].entries->head;
+        while (current != NULL) {
+            SDBEntry* next = current->next;
+            free(current->key);
+            free(current->value);
+            free(current);
+            current = next;
+        }
+        
+        // Free table structure
+        free(sdb->tables[i].name);
+        free(sdb->tables[i].entries);
+    }
+
+    // Free tables array
+    free(sdb->tables);
+    
+    // Free path
+    free(sdb->path);
+    
+    // Finally free the SDB structure
     free(sdb);
 }
 
@@ -177,15 +321,22 @@ void sdb_save(SDB* sdb) {
         return;
     }
 
+    size_t buffer_size = 1024;  // Initial size
+    size_t current_size = 0;
+    unsigned char* buffer = (unsigned char*)malloc(buffer_size);
+    
     // Write table count
-    fwrite(&sdb->table_count, sizeof(int), 1, file);
+    write_to_buffer(&buffer, &buffer_size, &current_size, 
+                   &sdb->table_count, sizeof(int));
     
     // Write each table
     for (int i = 0; i < sdb->table_count; i++) {
         // Write table name
         int name_len = strlen(sdb->tables[i].name);
-        fwrite(&name_len, sizeof(int), 1, file);
-        fwrite(sdb->tables[i].name, 1, name_len, file);
+        write_to_buffer(&buffer, &buffer_size, &current_size, 
+                       &name_len, sizeof(int));
+        write_to_buffer(&buffer, &buffer_size, &current_size, 
+                       sdb->tables[i].name, name_len);
         
         // Count and write entries
         int entry_count = 0;
@@ -195,7 +346,8 @@ void sdb_save(SDB* sdb) {
             current = current->next;
         }
         
-        fwrite(&entry_count, sizeof(int), 1, file);
+        write_to_buffer(&buffer, &buffer_size, &current_size, 
+                       &entry_count, sizeof(int));
         
         // Write each entry
         current = sdb->tables[i].entries->head;
@@ -203,15 +355,30 @@ void sdb_save(SDB* sdb) {
             int key_len = strlen(current->key);
             int value_len = strlen(current->value);
             
-            fwrite(&key_len, sizeof(int), 1, file);
-            fwrite(&value_len, sizeof(int), 1, file);
-            fwrite(current->key, 1, key_len, file);
-            fwrite(current->value, 1, value_len, file);
+            write_to_buffer(&buffer, &buffer_size, &current_size, 
+                           &key_len, sizeof(int));
+            write_to_buffer(&buffer, &buffer_size, &current_size, 
+                           &value_len, sizeof(int));
+            write_to_buffer(&buffer, &buffer_size, &current_size, 
+                           current->key, key_len);
+            write_to_buffer(&buffer, &buffer_size, &current_size, 
+                           current->value, value_len);
             
             current = current->next;
         }
     }
+
+    // Compress the buffer
+    size_t compressed_size;
+    unsigned char* compressed = rle_compress(buffer, current_size, &compressed_size);
     
+    // Write compressed size followed by compressed data
+    fwrite(&compressed_size, sizeof(size_t), 1, file);
+    fwrite(&current_size, sizeof(size_t), 1, file);  // Original size
+    fwrite(compressed, 1, compressed_size, file);
+    
+    free(buffer);
+    free(compressed);
     fclose(file);
 }
 
