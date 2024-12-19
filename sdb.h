@@ -1,7 +1,7 @@
 /**
  * @file sdb.h
  * @brief Simple Database Library
- * @version 0.2.0
+ * @version 0.3.0
  * 
  * This is a simple database library that is used to store data in a file.
  * It is not meant to be a full-featured database, but rather a simple way to store data.
@@ -17,7 +17,19 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define SDB_VERSION "0.2.0"
+#define SDB_VERSION "0.3.0"
+#define WINDOW_SIZE 1024
+#define MIN_MATCH 3
+#define POOL_BLOCK_SIZE 4096
+
+/**
+ * @brief Compression type for database storage
+ */
+typedef enum {
+    SDB_COMPRESS_NONE,
+    SDB_COMPRESS_RLE,
+    SDB_COMPRESS_LZ77
+} SDBCompressType;
 
 /**
  * @brief Compresses data using run-length encoding
@@ -91,6 +103,91 @@ static unsigned char* rle_decompress(const unsigned char* compressed, size_t com
 }
 
 /**
+ * @brief Compresses data using LZ77-style compression
+ * 
+ * @param data Input data to compress
+ * @param data_len Length of input data
+ * @param out_len Pointer to store compressed length
+ * @return Compressed data buffer
+ */
+static unsigned char* lz77_compress(const unsigned char* data, size_t data_len, size_t* out_len) {
+    unsigned char* compressed = (unsigned char*)malloc(data_len * 2);
+    size_t comp_pos = 0;
+    
+    for (size_t i = 0; i < data_len;) {
+        size_t best_len = 0;
+        size_t best_offset = 0;
+        
+        // Search in sliding window
+        size_t window_start = (i > WINDOW_SIZE) ? i - WINDOW_SIZE : 0;
+        
+        for (size_t j = window_start; j < i; j++) {
+            size_t len = 0;
+            while (i + len < data_len && 
+                   j + len < i && 
+                   data[i + len] == data[j + len] &&
+                   len < 255) {
+                len++;
+            }
+            
+            if (len > best_len) {
+                best_len = len;
+                best_offset = i - j;
+            }
+        }
+        
+        if (best_len >= MIN_MATCH) {
+            compressed[comp_pos++] = 1;  // Flag for match
+            compressed[comp_pos++] = best_offset & 0xFF;
+            compressed[comp_pos++] = (best_offset >> 8) & 0xFF;
+            compressed[comp_pos++] = best_len;
+            i += best_len;
+        } else {
+            compressed[comp_pos++] = 0;  // Flag for literal
+            compressed[comp_pos++] = data[i++];
+        }
+    }
+    
+    *out_len = comp_pos;
+    return realloc(compressed, comp_pos);
+}
+
+/**
+ * @brief Decompresses LZ77 compressed data
+ * 
+ * @param compressed Compressed input data
+ * @param comp_len Length of compressed data
+ * @param out_len Pointer to store decompressed length
+ * @return Decompressed data buffer
+ */
+static unsigned char* lz77_decompress(const unsigned char* compressed, size_t comp_len, size_t* out_len) {
+    if (!compressed || comp_len == 0) return NULL;
+    
+    unsigned char* decompressed = (unsigned char*)malloc(comp_len * 2); // Initial size estimate
+    size_t decom_pos = 0;
+    size_t pos = 0;
+    
+    while (pos < comp_len) {
+        if (compressed[pos] == 0) { // Literal
+            decompressed[decom_pos++] = compressed[pos + 1];
+            pos += 2;
+        } else { // Match
+            size_t offset = compressed[pos + 1] | (compressed[pos + 2] << 8);
+            size_t length = compressed[pos + 3];
+            
+            for (size_t i = 0; i < length; i++) {
+                decompressed[decom_pos] = decompressed[decom_pos - offset];
+                decom_pos++;
+            }
+            pos += 4;
+        }
+    }
+    
+    *out_len = decom_pos;
+    return realloc(decompressed, decom_pos);
+}
+
+/**
  * @struct SDBEntry
  * @brief A single entry in the database
  * 
@@ -115,10 +212,16 @@ typedef struct SDBEntry {
  * @brief The head of the list
  * @var tail
  * @brief The tail of the list
+ * @var capacity
+ * @brief The capacity of the hash table
+ * @var entries
+ * @brief The entries array for hash table
  */
 typedef struct {
     SDBEntry *head;
     SDBEntry *tail;
+    size_t capacity;
+    SDBEntry** entries;
 } SDBEntryList;
 
 /**
@@ -150,6 +253,7 @@ typedef struct {
     char *path;
     SDBTable *tables;
     int table_count;
+    SDBCompressType compress_type;
 } SDB;
 
 /**
@@ -180,7 +284,7 @@ static void write_to_buffer(unsigned char** buffer, size_t* buffer_size,
  * @param path The path to the database file
  * @return The database
  */
-SDB* sdb_open(const char* path) {
+SDB* sdb_open(const char* path, SDBCompressType compress_type) {
     SDB* sdb = (SDB*)malloc(sizeof(SDB));
     if (sdb == NULL) {
         return NULL;
@@ -189,6 +293,7 @@ SDB* sdb_open(const char* path) {
     sdb->path = strdup(path);
     sdb->tables = NULL;
     sdb->table_count = 0;
+    sdb->compress_type = compress_type;
 
     FILE* file = fopen(path, "rb");
     if (file != NULL) {
@@ -200,9 +305,14 @@ SDB* sdb_open(const char* path) {
         unsigned char* compressed = (unsigned char*)malloc(compressed_size);
         fread(compressed, 1, compressed_size, file);
         
-        // Decompress data
+        // Decompress data using the specified compression type
         size_t decompressed_size;
-        unsigned char* buffer = rle_decompress(compressed, compressed_size, &decompressed_size);
+        unsigned char* buffer;
+        if (compress_type == SDB_COMPRESS_RLE) {
+            buffer = rle_decompress(compressed, compressed_size, &decompressed_size);
+        } else {
+            buffer = lz77_decompress(compressed, compressed_size, &decompressed_size);
+        }
         free(compressed);
         
         if (buffer && decompressed_size == original_size) {
@@ -370,7 +480,13 @@ void sdb_save(SDB* sdb) {
 
     // Compress the buffer
     size_t compressed_size;
-    unsigned char* compressed = rle_compress(buffer, current_size, &compressed_size);
+    unsigned char* compressed;
+    
+    if (sdb->compress_type == SDB_COMPRESS_RLE) {
+        compressed = rle_compress(buffer, current_size, &compressed_size);
+    } else {
+        compressed = lz77_compress(buffer, current_size, &compressed_size);
+    }
     
     // Write compressed size followed by compressed data
     fwrite(&compressed_size, sizeof(size_t), 1, file);
@@ -391,10 +507,17 @@ void sdb_save(SDB* sdb) {
 void sdb_table_create(SDB* sdb, const char* name) {
     sdb->table_count++;
     sdb->tables = (SDBTable*)realloc(sdb->tables, sizeof(SDBTable) * sdb->table_count);
-    sdb->tables[sdb->table_count - 1].name = strdup(name);
-    sdb->tables[sdb->table_count - 1].entries = (SDBEntryList*)malloc(sizeof(SDBEntryList));
-    sdb->tables[sdb->table_count - 1].entries->head = NULL;
-    sdb->tables[sdb->table_count - 1].entries->tail = NULL;
+    
+    // Initialize the new table
+    SDBTable* table = &sdb->tables[sdb->table_count - 1];
+    table->name = strdup(name);
+    table->entries = (SDBEntryList*)malloc(sizeof(SDBEntryList));
+    
+    // Initialize hash table components
+    table->entries->head = NULL;
+    table->entries->tail = NULL;
+    table->entries->capacity = 16;  // Initial capacity, can be adjusted
+    table->entries->entries = (SDBEntry**)calloc(table->entries->capacity, sizeof(SDBEntry*));
 }
 
 /**
@@ -407,6 +530,8 @@ void sdb_table_destroy(SDB* sdb, const char* name) {
     for (int i = 0; i < sdb->table_count; i++) {
         if (strcmp(sdb->tables[i].name, name) == 0) {
             free(sdb->tables[i].name);
+            
+            // Free entries
             SDBEntry* current = sdb->tables[i].entries->head;
             while (current != NULL) {
                 SDBEntry* next = current->next;
@@ -415,6 +540,10 @@ void sdb_table_destroy(SDB* sdb, const char* name) {
                 free(current);
                 current = next;
             }
+            
+            // Free hash table array
+            free(sdb->tables[i].entries->entries);
+            free(sdb->tables[i].entries);
         }
     }
 }
@@ -435,6 +564,20 @@ SDBTable* sdb_table_find(SDB* sdb, const char* name) {
     return NULL;
 }
 
+typedef struct {
+    size_t capacity;
+    size_t size;
+    SDBEntry** entries;
+} SDBHashTable;
+
+static size_t hash_string(const char* str) {
+    size_t hash = 5381;
+    int c;
+    while ((c = *str++))
+        hash = ((hash << 5) + hash) + c;
+    return hash;
+}
+
 /**
  * @brief Sets a value in the database
  * 
@@ -445,10 +588,17 @@ SDBTable* sdb_table_find(SDB* sdb, const char* name) {
  */
 void sdb_table_set(SDB* sdb, const char* table, const char* key, const char* value) {
     SDBTable* t = sdb_table_find(sdb, table);
-    if (t == NULL) {
-        return;
+    if (!t) return;
+    
+    size_t hash = hash_string(key) % t->entries->capacity;
+    SDBEntry* entry = t->entries->entries[hash];
+    
+    // Handle collision with linear probing
+    while (entry && strcmp(entry->key, key) != 0) {
+        hash = (hash + 1) % t->entries->capacity;
+        entry = t->entries->entries[hash];
     }
-
+    
     SDBEntry* e = (SDBEntry*)malloc(sizeof(SDBEntry));
     e->key = strdup(key);
     e->value = strdup(value);
@@ -486,6 +636,45 @@ char* sdb_table_get(SDB* sdb, const char* table, const char* key) {
         e = e->next;
     }
     return NULL;
+}
+
+typedef struct MemoryBlock {
+    unsigned char* data;
+    size_t used;
+    struct MemoryBlock* next;
+} MemoryBlock;
+
+typedef struct {
+    MemoryBlock* current;
+    size_t block_size;
+} MemoryPool;
+
+static void* pool_alloc(MemoryPool* pool, size_t size) {
+    if (pool->current->used + size > pool->block_size) {
+        MemoryBlock* new_block = malloc(sizeof(MemoryBlock));
+        new_block->data = malloc(pool->block_size);
+        new_block->used = 0;
+        new_block->next = pool->current;
+        pool->current = new_block;
+    }
+    
+    void* ptr = pool->current->data + pool->current->used;
+    pool->current->used += size;
+    return ptr;
+}
+
+typedef struct {
+    char* table;
+    char* key;
+    char* value;
+} SDBOperation;
+
+void sdb_batch_execute(SDB* sdb, SDBOperation* ops, size_t count) {
+    for (size_t i = 0; i < count; i++) {
+        sdb_table_set(sdb, ops[i].table, ops[i].key, ops[i].value);
+    }
+    // Single save at the end
+    sdb_save(sdb);
 }
 
 #endif
