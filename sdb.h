@@ -16,11 +16,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 
 #define SDB_VERSION "0.3.0"
 #define WINDOW_SIZE 1024
 #define MIN_MATCH 3
 #define POOL_BLOCK_SIZE 4096
+#define SDB_MAGIC 0x53444246  // "SDBF" in ASCII
+#define SDB_FILE_VERSION 1
 
 /**
  * @brief Compression type for database storage
@@ -297,6 +300,26 @@ SDB* sdb_open(const char* path, SDBCompressType compress_type) {
 
     FILE* file = fopen(path, "rb");
     if (file != NULL) {
+        // Read and verify file header
+        uint32_t magic, version;
+        SDBCompressType stored_compress_type;
+        
+        if (fread(&magic, sizeof(uint32_t), 1, file) != 1 ||
+            fread(&version, sizeof(uint32_t), 1, file) != 1 ||
+            fread(&stored_compress_type, sizeof(SDBCompressType), 1, file) != 1) {
+            fclose(file);
+            return sdb;  // Return empty database if header read fails
+        }
+
+        // Verify magic number and version
+        if (magic != SDB_MAGIC || version > SDB_FILE_VERSION) {
+            fclose(file);
+            return sdb;  // Return empty database if validation fails
+        }
+
+        // Use stored compression type if it exists
+        sdb->compress_type = stored_compress_type;
+
         // Read compressed data
         size_t compressed_size, original_size;
         fread(&compressed_size, sizeof(size_t), 1, file);
@@ -430,6 +453,13 @@ void sdb_save(SDB* sdb) {
     if (file == NULL) {
         return;
     }
+
+    // Write file header
+    uint32_t magic = SDB_MAGIC;
+    uint32_t version = SDB_FILE_VERSION;
+    fwrite(&magic, sizeof(uint32_t), 1, file);
+    fwrite(&version, sizeof(uint32_t), 1, file);
+    fwrite(&sdb->compress_type, sizeof(SDBCompressType), 1, file);
 
     size_t buffer_size = 1024;  // Initial size
     size_t current_size = 0;
