@@ -1,5 +1,7 @@
 <map id="SDBTable" name="SDBTable">
-<area shape="rect" id="node1" title=" " alt="" coords="17,213,100,240"/>
-<area shape="rect" id="node2" href="$structSDBEntryList.html" title=" " alt="" coords="5,124,112,151"/>
-<area shape="rect" id="node3" href="$structSDBEntry.html" title=" " alt="" coords="17,5,100,32"/>
+<area shape="rect" id="node1" title=" " alt="" coords="7,317,89,344"/>
+<area shape="rect" id="node2" href="$structSDBEntryList.html" title=" " alt="" coords="52,228,159,255"/>
+<area shape="rect" id="node3" href="$structSDBEntry.html" title=" " alt="" coords="52,109,135,136"/>
+<area shape="rect" id="node4" title=" " alt="" coords="5,5,67,32"/>
+<area shape="rect" id="node5" title=" " alt="" coords="217,109,277,136"/>
 </map>
