@@ -86,7 +86,8 @@ jobs:
           EXTRACT_STATIC   = YES
           WARN_IF_UNDOCUMENTED = YES
           OPTIMIZE_OUTPUT_FOR_C = YES
-          USE_MDFILE_AS_MAINPAGE = README.md
+          MAIN_PAGE_DOCUMENTATION = NO
+          USE_MDFILE_AS_MAINPAGE = 
           MARKDOWN_SUPPORT = YES
           TOC_INCLUDE_HEADINGS = 5
           
