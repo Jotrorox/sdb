@@ -30,6 +30,7 @@ jobs:
           PROJECT_NAME           = "SDB"
           PROJECT_NUMBER        = "0.4.0"
           PROJECT_BRIEF        = "A Simple Database Implementation in C"
+          PROJECT_LOGO         = 
           
           # Output settings
           OUTPUT_DIRECTORY     = docs
@@ -42,16 +43,40 @@ jobs:
           
           # HTML settings
           GENERATE_HTML       = YES
-          HTML_COLORSTYLE    = LIGHT
+          HTML_COLORSTYLE    = DARK
+          HTML_COLORSTYLE_HUE    = 220
+          HTML_COLORSTYLE_SAT    = 100
+          HTML_COLORSTYLE_GAMMA  = 80
+          HTML_EXTRA_STYLESHEET  = 
           GENERATE_TREEVIEW  = YES
           DISABLE_INDEX      = NO
           FULL_SIDEBAR       = YES
+          TREEVIEW_WIDTH     = 250
+          
+          # Layout
+          LAYOUT_FILE        =
+          DISABLE_INDEX      = NO
+          GENERATE_TREEVIEW  = YES
+          ENUM_VALUES_PER_LINE = 1
+          TREEVIEW_WIDTH     = 250
+          FULL_SIDEBAR       = YES
+          
+          # Appearance
+          HIDE_UNDOC_RELATIONS = NO
+          HAVE_DOT            = YES
+          DOT_IMAGE_FORMAT    = svg
+          INTERACTIVE_SVG     = YES
+          DOT_TRANSPARENT     = YES
+          DOT_MULTI_TARGETS   = YES
+          GENERATE_LEGEND     = YES
+          DOT_CLEANUP         = YES
           
           # Source code settings
           SOURCE_BROWSER     = YES
           INLINE_SOURCES    = YES
           REFERENCED_BY_RELATION = YES
           REFERENCES_RELATION    = YES
+          REFERENCES_LINK_SOURCE = YES
           CALL_GRAPH            = YES
           CALLER_GRAPH          = YES
           
@@ -62,6 +87,9 @@ jobs:
           EXTRACT_STATIC   = YES
           WARN_IF_UNDOCUMENTED = YES
           OPTIMIZE_OUTPUT_FOR_C = YES
+          USE_MDFILE_AS_MAINPAGE = README.md
+          MARKDOWN_SUPPORT = YES
+          TOC_INCLUDE_HEADINGS = 5
           EOF
           
       - name: Generate Documentation
