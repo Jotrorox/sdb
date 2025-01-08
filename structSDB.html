@@ -9,6 +9,10 @@
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -22,7 +26,9 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">SDB
+   &#160;<span id="projectnumber">0.4.0</span>
    </div>
+   <div id="projectbrief">A Simple Database Implementation in C</div>
   </td>
  </tr>
  </tbody>
@@ -45,6 +51,23 @@ $(function() {
 });
 /* @license-end */</script>
 <div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('structSDB.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -59,43 +82,125 @@ $(function() {
 </iframe>
 </div>
 
-</div><!-- top -->
 <div class="header">
   <div class="summary">
-<a href="#pub-attribs">Public Attributes</a> &#124;
-<a href="structSDB-members.html">List of all members</a>  </div>
+<a href="#pub-attribs">Data Fields</a>  </div>
   <div class="headertitle">
 <div class="title">SDB Struct Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p><code>#include &lt;<a class="el" href="sdb_8h_source.html">sdb.h</a>&gt;</code></p>
 <div class="dynheader">
 Collaboration diagram for SDB:</div>
 <div class="dyncontent">
 <div class="center"><img src="structSDB__coll__graph.png" border="0" usemap="#aSDB_coll__map" alt="Collaboration graph"/></div>
-<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
+<map name="aSDB_coll__map" id="aSDB_coll__map">
+<area shape="rect" title=" " alt="" coords="34,303,83,329"/>
+<area shape="rect" href="structSDBTable.html" title=" " alt="" coords="17,213,100,240"/>
+<area shape="rect" href="structSDBEntryList.html" title=" " alt="" coords="5,124,112,151"/>
+<area shape="rect" href="structSDBEntry.html" title=" " alt="" coords="17,5,100,32"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
-Public Attributes</h2></td></tr>
-<tr class="memitem:a2f7221df5d18e2113cf2c523571ff31c"><td class="memItemLeft" align="right" valign="top"><a id="a2f7221df5d18e2113cf2c523571ff31c"></a>
-char *&#160;</td><td class="memItemRight" valign="bottom"><b>path</b></td></tr>
+Data Fields</h2></td></tr>
+<tr class="memitem:a2f7221df5d18e2113cf2c523571ff31c"><td class="memItemLeft" align="right" valign="top">char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSDB.html#a2f7221df5d18e2113cf2c523571ff31c">path</a></td></tr>
 <tr class="separator:a2f7221df5d18e2113cf2c523571ff31c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a436fe7ee499bfdeb5ee66060d6641bb4"><td class="memItemLeft" align="right" valign="top"><a id="a436fe7ee499bfdeb5ee66060d6641bb4"></a>
-<a class="el" href="structSDBTable.html">SDBTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>tables</b></td></tr>
+<tr class="memitem:a436fe7ee499bfdeb5ee66060d6641bb4"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structSDBTable.html">SDBTable</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSDB.html#a436fe7ee499bfdeb5ee66060d6641bb4">tables</a></td></tr>
 <tr class="separator:a436fe7ee499bfdeb5ee66060d6641bb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a723b2989a3d4fee0754075e591142669"><td class="memItemLeft" align="right" valign="top"><a id="a723b2989a3d4fee0754075e591142669"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>table_count</b></td></tr>
+<tr class="memitem:a723b2989a3d4fee0754075e591142669"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSDB.html#a723b2989a3d4fee0754075e591142669">table_count</a></td></tr>
 <tr class="separator:a723b2989a3d4fee0754075e591142669"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac7aa2293fc65e3a2d49eaebbf22ed405"><td class="memItemLeft" align="right" valign="top"><a id="ac7aa2293fc65e3a2d49eaebbf22ed405"></a>
-SDBCompressType&#160;</td><td class="memItemRight" valign="bottom"><b>compress_type</b></td></tr>
+<tr class="memitem:ac7aa2293fc65e3a2d49eaebbf22ed405"><td class="memItemLeft" align="right" valign="top"><a class="el" href="sdb_8h.html#a3d2d940beaee1d9a05f7c5e3db37439c">SDBCompressType</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structSDB.html#ac7aa2293fc65e3a2d49eaebbf22ed405">compress_type</a></td></tr>
 <tr class="separator:ac7aa2293fc65e3a2d49eaebbf22ed405"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock">
+<p class="definition">Definition at line <a class="el" href="sdb_8h_source.html#l00058">58</a> of file <a class="el" href="sdb_8h_source.html">sdb.h</a>.</p>
+</div><h2 class="groupheader">Field Documentation</h2>
+<a id="ac7aa2293fc65e3a2d49eaebbf22ed405"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac7aa2293fc65e3a2d49eaebbf22ed405">&#9670;&nbsp;</a></span>compress_type</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="sdb_8h.html#a3d2d940beaee1d9a05f7c5e3db37439c">SDBCompressType</a> SDB::compress_type</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="sdb_8h_source.html#l00062">62</a> of file <a class="el" href="sdb_8h_source.html">sdb.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="sdb_8h_source.html#l00676">sdb_info()</a>, <a class="el" href="sdb_8h_source.html#l00259">sdb_open()</a>, and <a class="el" href="sdb_8h_source.html#l00420">sdb_save()</a>.</p>
+
+</div>
+</div>
+<a id="a2f7221df5d18e2113cf2c523571ff31c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2f7221df5d18e2113cf2c523571ff31c">&#9670;&nbsp;</a></span>path</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">char* SDB::path</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="sdb_8h_source.html#l00059">59</a> of file <a class="el" href="sdb_8h_source.html">sdb.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="sdb_8h_source.html#l00385">sdb_close()</a>, <a class="el" href="sdb_8h_source.html#l00676">sdb_info()</a>, <a class="el" href="sdb_8h_source.html#l00259">sdb_open()</a>, and <a class="el" href="sdb_8h_source.html#l00420">sdb_save()</a>.</p>
+
+</div>
+</div>
+<a id="a723b2989a3d4fee0754075e591142669"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a723b2989a3d4fee0754075e591142669">&#9670;&nbsp;</a></span>table_count</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int SDB::table_count</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="sdb_8h_source.html#l00061">61</a> of file <a class="el" href="sdb_8h_source.html">sdb.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="sdb_8h_source.html#l00385">sdb_close()</a>, <a class="el" href="sdb_8h_source.html#l00259">sdb_open()</a>, <a class="el" href="sdb_8h_source.html#l00420">sdb_save()</a>, <a class="el" href="sdb_8h_source.html#l00509">sdb_table_create()</a>, <a class="el" href="sdb_8h_source.html#l00531">sdb_table_destroy()</a>, and <a class="el" href="sdb_8h_source.html#l00560">sdb_table_find()</a>.</p>
+
+</div>
+</div>
+<a id="a436fe7ee499bfdeb5ee66060d6641bb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a436fe7ee499bfdeb5ee66060d6641bb4">&#9670;&nbsp;</a></span>tables</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="structSDBTable.html">SDBTable</a>* SDB::tables</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="sdb_8h_source.html#l00060">60</a> of file <a class="el" href="sdb_8h_source.html">sdb.h</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="sdb_8h_source.html#l00385">sdb_close()</a>, <a class="el" href="sdb_8h_source.html#l00259">sdb_open()</a>, <a class="el" href="sdb_8h_source.html#l00420">sdb_save()</a>, <a class="el" href="sdb_8h_source.html#l00509">sdb_table_create()</a>, <a class="el" href="sdb_8h_source.html#l00531">sdb_table_destroy()</a>, and <a class="el" href="sdb_8h_source.html#l00560">sdb_table_find()</a>.</p>
+
+</div>
+</div>
 <hr/>The documentation for this struct was generated from the following file:<ul>
 <li><a class="el" href="sdb_8h_source.html">sdb.h</a></li>
 </ul>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="structSDB.html">SDB</a></li>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+  </ul>
+</div>
 </body>
 </html>

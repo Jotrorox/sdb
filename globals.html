@@ -5,10 +5,14 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>SDB: File Members</title>
+<title>SDB: Globals</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
 <link href="search/search.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="search/searchdata.js"></script>
 <script type="text/javascript" src="search/search.js"></script>
@@ -22,7 +26,9 @@
  <tr style="height: 56px;">
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">SDB
+   &#160;<span id="projectnumber">0.4.0</span>
    </div>
+   <div id="projectbrief">A Simple Database Implementation in C</div>
   </td>
  </tr>
  </tbody>
@@ -46,6 +52,22 @@ $(function() {
 /* @license-end */</script>
 <div id="main-nav"></div>
 </div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:cf05388f2679ee054f2beb29a391d25f4e673ac3&amp;dn=gpl-2.0.txt GPL-v2 */
+$(document).ready(function(){initNavTree('globals.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
      onmouseover="return searchBox.OnSearchSelectShow()"
@@ -61,9 +83,57 @@ $(function() {
 </div>
 
 <div class="contents">
-<div class="textblock">Here is a list of all documented file members with links to the documentation:</div><ul>
+<div class="textblock">Here is a list of all functions, variables, defines, enums, and typedefs with links to the files they belong to:</div><ul>
+<li>hash_string()
+: <a class="el" href="sdb_8h.html#a1880aa13e614310d0e2022880bbbec14">sdb.h</a>
+</li>
+<li>lz77_compress()
+: <a class="el" href="sdb_8h.html#a06e5ec38763006ac3698d3232a70c37e">sdb.h</a>
+</li>
+<li>lz77_decompress()
+: <a class="el" href="sdb_8h.html#ae6e48bacc3e6a6757a4dc1fdf56f7855">sdb.h</a>
+</li>
+<li>main()
+: <a class="el" href="main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4">main.c</a>
+</li>
+<li>MIN_MATCH
+: <a class="el" href="sdb_8h.html#a7984ceb1ff48ac91172976b91ed43f60">sdb.h</a>
+</li>
+<li>POOL_BLOCK_SIZE
+: <a class="el" href="sdb_8h.html#a5825029f41f63d99cf43e1791efed558">sdb.h</a>
+</li>
+<li>rle_compress()
+: <a class="el" href="sdb_8h.html#aa5ac13dd5ce8b589b99fb8d55591455c">sdb.h</a>
+</li>
+<li>rle_decompress()
+: <a class="el" href="sdb_8h.html#a9a446288941fb71784a3a1cce823a689">sdb.h</a>
+</li>
+<li>sdb_batch_execute()
+: <a class="el" href="sdb_8h.html#a2a86f0ae8eaea9297bd3220f2a8ab869">sdb.h</a>
+</li>
 <li>sdb_close()
 : <a class="el" href="sdb_8h.html#a2743f688b5146ccdfbac2a01ff8e5879">sdb.h</a>
+</li>
+<li>SDB_COMPRESS_LZ77
+: <a class="el" href="sdb_8h.html#a3d2d940beaee1d9a05f7c5e3db37439ca5fa1606501ce982039ea76f29377a72e">sdb.h</a>
+</li>
+<li>SDB_COMPRESS_NONE
+: <a class="el" href="sdb_8h.html#a3d2d940beaee1d9a05f7c5e3db37439ca0cbf977953dd43ca8dbff2f73aa1a290">sdb.h</a>
+</li>
+<li>SDB_COMPRESS_RLE
+: <a class="el" href="sdb_8h.html#a3d2d940beaee1d9a05f7c5e3db37439ca3ebb5c9c64152c0e7af57d8f8e49cc95">sdb.h</a>
+</li>
+<li>SDB_FILE_VERSION
+: <a class="el" href="sdb_8h.html#a1bc4d18b6ff6149b3c14de17ccf0db53">sdb.h</a>
+</li>
+<li>sdb_free_info()
+: <a class="el" href="sdb_8h.html#a523c4c4709d3040e7045c4cc0da47d50">sdb.h</a>
+</li>
+<li>sdb_info()
+: <a class="el" href="sdb_8h.html#a19d24c836d2eca10ac56d2a2e39a1789">sdb.h</a>
+</li>
+<li>SDB_MAGIC
+: <a class="el" href="sdb_8h.html#a5ff2d268b5a57b6c9ea30955893348dc">sdb.h</a>
 </li>
 <li>sdb_open()
 : <a class="el" href="sdb_8h.html#af4857c5c1460dbb058578dc550a5eb59">sdb.h</a>
@@ -86,11 +156,29 @@ $(function() {
 <li>sdb_table_set()
 : <a class="el" href="sdb_8h.html#a59a73b6989beba1f08df6a9d1ec9e8ae">sdb.h</a>
 </li>
+<li>SDB_VERSION
+: <a class="el" href="sdb_8h.html#a26cc44b0d3530cbd9cf704bf8cdc4bf0">sdb.h</a>
+</li>
+<li>SDBCompressType
+: <a class="el" href="sdb_8h.html#a3d2d940beaee1d9a05f7c5e3db37439c">sdb.h</a>
+</li>
+<li>SDBEntry
+: <a class="el" href="sdb_8h.html#a6fdbdecb10c46d4de474e23dd1dfd618">sdb.h</a>
+</li>
+<li>WINDOW_SIZE
+: <a class="el" href="sdb_8h.html#ab3f68d59e815ea166f8c983bc6e85c5b">sdb.h</a>
+</li>
+<li>write_to_buffer()
+: <a class="el" href="sdb_8h.html#a0c179ece8c7ce27666738d126d88cf9f">sdb.h</a>
+</li>
 </ul>
 </div><!-- contents -->
+</div><!-- doc-content -->
 <!-- start footer part -->
-<hr class="footer"/><address class="footer"><small>
-Generated by&#160;<a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1
-</small></address>
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.9.1 </li>
+  </ul>
+</div>
 </body>
 </html>

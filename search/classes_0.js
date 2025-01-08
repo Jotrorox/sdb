@@ -1,10 +1,10 @@
 var searchData=
 [
-  ['sdb_17',['SDB',['../structSDB.html',1,'']]],
-  ['sdbentry_18',['SDBEntry',['../structSDBEntry.html',1,'']]],
-  ['sdbentrylist_19',['SDBEntryList',['../structSDBEntryList.html',1,'']]],
-  ['sdbinfo_20',['SDBInfo',['../structSDBInfo.html',1,'']]],
-  ['sdboperation_21',['SDBOperation',['../structSDBOperation.html',1,'']]],
-  ['sdbpool_22',['SDBPool',['../structSDBPool.html',1,'']]],
-  ['sdbtable_23',['SDBTable',['../structSDBTable.html',1,'']]]
+  ['sdb_51',['SDB',['../structSDB.html',1,'']]],
+  ['sdbentry_52',['SDBEntry',['../structSDBEntry.html',1,'']]],
+  ['sdbentrylist_53',['SDBEntryList',['../structSDBEntryList.html',1,'']]],
+  ['sdbinfo_54',['SDBInfo',['../structSDBInfo.html',1,'']]],
+  ['sdboperation_55',['SDBOperation',['../structSDBOperation.html',1,'']]],
+  ['sdbpool_56',['SDBPool',['../structSDBPool.html',1,'']]],
+  ['sdbtable_57',['SDBTable',['../structSDBTable.html',1,'']]]
 ];

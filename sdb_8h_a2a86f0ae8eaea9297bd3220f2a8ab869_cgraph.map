@@ -1,0 +1,10 @@
+<map id="sdb_batch_execute" name="sdb_batch_execute">
+<area shape="rect" id="node1" title=" " alt="" coords="5,81,152,108"/>
+<area shape="rect" id="node2" href="$sdb_8h.html#a606f05f11750d966b89fccda2a42d7a3" title="Saves the database." alt="" coords="377,56,459,83"/>
+<area shape="rect" id="node6" href="$sdb_8h.html#a59a73b6989beba1f08df6a9d1ec9e8ae" title="Sets a value in the database." alt="" coords="200,107,312,133"/>
+<area shape="rect" id="node3" href="$sdb_8h.html#a06e5ec38763006ac3698d3232a70c37e" title="Compresses data using LZ77&#45;style compression." alt="" coords="525,5,643,32"/>
+<area shape="rect" id="node4" href="$sdb_8h.html#aa5ac13dd5ce8b589b99fb8d55591455c" title="Compresses data using run&#45;length encoding." alt="" coords="529,56,639,83"/>
+<area shape="rect" id="node5" href="$sdb_8h.html#a0c179ece8c7ce27666738d126d88cf9f" title="Helper function to write data to a buffer with automatic resizing." alt="" coords="524,107,644,133"/>
+<area shape="rect" id="node7" href="$sdb_8h.html#a1880aa13e614310d0e2022880bbbec14" title=" " alt="" coords="369,107,467,133"/>
+<area shape="rect" id="node8" href="$sdb_8h.html#a80de05c92ea53a4c3f73991ae28c569d" title="Finds a table in the database." alt="" coords="360,157,476,184"/>
+</map>

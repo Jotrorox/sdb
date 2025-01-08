@@ -1,0 +1,6 @@
+<map id="sdb_save" name="sdb_save">
+<area shape="rect" id="node1" title="Saves the database." alt="" coords="5,56,88,83"/>
+<area shape="rect" id="node2" href="$sdb_8h.html#a06e5ec38763006ac3698d3232a70c37e" title="Compresses data using LZ77&#45;style compression." alt="" coords="137,5,255,32"/>
+<area shape="rect" id="node3" href="$sdb_8h.html#aa5ac13dd5ce8b589b99fb8d55591455c" title="Compresses data using run&#45;length encoding." alt="" coords="141,56,251,83"/>
+<area shape="rect" id="node4" href="$sdb_8h.html#a0c179ece8c7ce27666738d126d88cf9f" title="Helper function to write data to a buffer with automatic resizing." alt="" coords="136,107,256,133"/>
+</map>
