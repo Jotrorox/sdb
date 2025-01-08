@@ -43,21 +43,17 @@ jobs:
           
           # HTML settings
           GENERATE_HTML       = YES
-          HTML_COLORSTYLE    = DARK
-          HTML_COLORSTYLE_HUE    = 209
-          HTML_COLORSTYLE_SAT    = 255
-          HTML_COLORSTYLE_GAMMA  = 113
-          HTML_THEME            = "doxygen-awesome-css"
-          
-          # Download custom theme
-          GENERATE_TREEVIEW      = YES
-          DISABLE_INDEX         = NO
-          FULL_SIDEBAR         = YES
-          TREEVIEW_WIDTH       = 335
+          GENERATE_TREEVIEW  = YES
+          DISABLE_INDEX      = NO
+          FULL_SIDEBAR       = NO
+          HTML_COLORSTYLE    = LIGHT
+          HTML_EXTRA_STYLESHEET  = doxygen-awesome-css/doxygen-awesome.css \
+                                 doxygen-awesome-css/doxygen-awesome-sidebar-only.css
           
           # Layout
           LAYOUT_FILE        =
           ENUM_VALUES_PER_LINE = 1
+          TREEVIEW_WIDTH       = 335
           
           # Appearance
           HIDE_UNDOC_RELATIONS = NO
@@ -104,7 +100,6 @@ jobs:
         run: |
           mkdir -p docs/html/
           git clone https://github.com/jothepro/doxygen-awesome-css.git
-          cp doxygen-awesome-css/doxygen-awesome.css docs/html/
           
       - name: Generate Documentation
         run: doxygen Doxyfile
