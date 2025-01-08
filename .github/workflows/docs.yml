@@ -21,18 +21,48 @@ jobs:
       - uses: actions/checkout@v4
       
       - name: Install Doxygen
-        run: sudo apt-get install doxygen -y
-        
-      - name: Generate Doxygen Configuration
-        run: doxygen -g
+        run: sudo apt-get install doxygen graphviz -y
         
       - name: Configure Doxygen
         run: |
-          sed -i 's/PROJECT_NAME.*=.*/PROJECT_NAME = "SDB"/' Doxyfile
-          sed -i 's/OUTPUT_DIRECTORY.*=.*/OUTPUT_DIRECTORY = docs/' Doxyfile
-          sed -i 's/HTML_OUTPUT.*=.*/HTML_OUTPUT = html/' Doxyfile
-          sed -i 's/GENERATE_LATEX.*=.*/GENERATE_LATEX = NO/' Doxyfile
-          sed -i 's/GENERATE_HTML.*=.*/GENERATE_HTML = YES/' Doxyfile
+          cat > Doxyfile << 'EOF'
+          # Project settings
+          PROJECT_NAME           = "SDB"
+          PROJECT_NUMBER        = "0.4.0"
+          PROJECT_BRIEF        = "A Simple Database Implementation in C"
+          
+          # Output settings
+          OUTPUT_DIRECTORY     = docs
+          HTML_OUTPUT          = html
+          
+          # Input settings
+          INPUT               = .
+          FILE_PATTERNS       = *.c *.h
+          RECURSIVE           = YES
+          
+          # HTML settings
+          GENERATE_HTML       = YES
+          HTML_COLORSTYLE    = LIGHT
+          GENERATE_TREEVIEW  = YES
+          DISABLE_INDEX      = NO
+          FULL_SIDEBAR       = YES
+          
+          # Source code settings
+          SOURCE_BROWSER     = YES
+          INLINE_SOURCES    = YES
+          REFERENCED_BY_RELATION = YES
+          REFERENCES_RELATION    = YES
+          CALL_GRAPH            = YES
+          CALLER_GRAPH          = YES
+          
+          # Other settings
+          GENERATE_LATEX    = NO
+          EXTRACT_ALL      = YES
+          EXTRACT_PRIVATE  = YES
+          EXTRACT_STATIC   = YES
+          WARN_IF_UNDOCUMENTED = YES
+          OPTIMIZE_OUTPUT_FOR_C = YES
+          EOF
           
       - name: Generate Documentation
         run: doxygen Doxyfile
