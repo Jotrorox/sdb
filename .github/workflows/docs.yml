@@ -55,6 +55,9 @@ jobs:
           HTML_EXTRA_STYLESHEET  = doxygen-awesome-css/doxygen-awesome.css \
                                  doxygen-awesome-css/doxygen-awesome-sidebar-only.css
           
+          HTML_INDEX_FILENAME = sdb_8h.html
+          HTML_FILE_EXTENSION = .html
+          
           # Layout
           LAYOUT_FILE        =
           ENUM_VALUES_PER_LINE = 1
@@ -103,6 +106,11 @@ jobs:
           
       - name: Generate Documentation
         run: doxygen Doxyfile
+        
+      - name: Set default page
+        run: |
+          cd docs/html
+          cp sdb_8h.html index.html
         
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
