@@ -44,22 +44,20 @@ jobs:
           # HTML settings
           GENERATE_HTML       = YES
           HTML_COLORSTYLE    = DARK
-          HTML_COLORSTYLE_HUE    = 220
-          HTML_COLORSTYLE_SAT    = 100
-          HTML_COLORSTYLE_GAMMA  = 80
-          HTML_EXTRA_STYLESHEET  = 
-          GENERATE_TREEVIEW  = YES
-          DISABLE_INDEX      = NO
-          FULL_SIDEBAR       = YES
-          TREEVIEW_WIDTH     = 250
+          HTML_COLORSTYLE_HUE    = 209
+          HTML_COLORSTYLE_SAT    = 255
+          HTML_COLORSTYLE_GAMMA  = 113
+          HTML_THEME            = "doxygen-awesome-css"
+          
+          # Download custom theme
+          GENERATE_TREEVIEW      = YES
+          DISABLE_INDEX         = NO
+          FULL_SIDEBAR         = YES
+          TREEVIEW_WIDTH       = 335
           
           # Layout
           LAYOUT_FILE        =
-          DISABLE_INDEX      = NO
-          GENERATE_TREEVIEW  = YES
           ENUM_VALUES_PER_LINE = 1
-          TREEVIEW_WIDTH     = 250
-          FULL_SIDEBAR       = YES
           
           # Appearance
           HIDE_UNDOC_RELATIONS = NO
@@ -90,7 +88,23 @@ jobs:
           USE_MDFILE_AS_MAINPAGE = README.md
           MARKDOWN_SUPPORT = YES
           TOC_INCLUDE_HEADINGS = 5
+          
+          # Modern features
+          HTML_DYNAMIC_SECTIONS  = YES
+          HTML_INDEX_NUM_ENTRIES = 100
+          SEARCHENGINE           = YES
+          SERVER_BASED_SEARCH    = NO
+          EXTERNAL_SEARCH        = NO
+          SEARCHDATA_FILE        = searchdata.xml
+          GENERATE_DOCSET       = NO
           EOF
+          
+      # Add step to download and setup doxygen-awesome-css theme
+      - name: Setup Doxygen Theme
+        run: |
+          mkdir -p docs/html/
+          git clone https://github.com/jothepro/doxygen-awesome-css.git
+          cp doxygen-awesome-css/doxygen-awesome.css docs/html/
           
       - name: Generate Documentation
         run: doxygen Doxyfile
