@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['lz77_5fcompress_6',['lz77_compress',['../sdb_8h.html#a06e5ec38763006ac3698d3232a70c37e',1,'sdb.h']]],
-  ['lz77_5fdecompress_7',['lz77_decompress',['../sdb_8h.html#ae6e48bacc3e6a6757a4dc1fdf56f7855',1,'sdb.h']]]
+  ['lz77_5fcompress_0',['lz77_compress',['../sdb_8h.html#a41dc88ab89048875a54bfc7bd008ae3b',1,'sdb.h']]],
+  ['lz77_5fdecompress_1',['lz77_decompress',['../sdb_8h.html#acbe8f7c7619d4101a890840dba09f51e',1,'sdb.h']]]
 ];

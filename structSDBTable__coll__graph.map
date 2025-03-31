@@ -1,7 +1,13 @@
 <map id="SDBTable" name="SDBTable">
-<area shape="rect" id="node1" title=" " alt="" coords="7,317,89,344"/>
-<area shape="rect" id="node2" href="$structSDBEntryList.html" title=" " alt="" coords="52,228,159,255"/>
-<area shape="rect" id="node3" href="$structSDBEntry.html" title=" " alt="" coords="52,109,135,136"/>
-<area shape="rect" id="node4" title=" " alt="" coords="5,5,67,32"/>
-<area shape="rect" id="node5" title=" " alt="" coords="217,109,277,136"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,313,88,339"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="16,5,77,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="49,45,49,313,44,313,44,45"/>
+<area shape="rect" id="Node000004" href="$structSDBEntry.html" title=" " alt="" coords="63,108,145,133"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="62,42,100,107,95,109,58,44"/>
+<area shape="rect" id="Node000003" href="$structSDBEntryList.html" title=" " alt="" coords="63,225,169,251"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="100,263,58,314,54,311,96,260"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="109,147,117,225,112,226,104,147"/>
+<area shape="poly" id="edge5_Node000004_Node000004" title=" " alt="" coords="160,110,168,114,172,121,164,130,146,133,145,128,161,125,167,120,165,118,158,115"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="227,108,287,133"/>
+<area shape="poly" id="edge6_Node000003_Node000005" title=" " alt="" coords="237,145,170,203,136,227,133,223,166,199,233,141"/>
 </map>

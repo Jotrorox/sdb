@@ -1,6 +1,9 @@
 <map id="hash_string" name="hash_string">
-<area shape="rect" id="node1" title=" " alt="" coords="360,31,457,57"/>
-<area shape="rect" id="node2" href="$sdb_8h.html#a59a73b6989beba1f08df6a9d1ec9e8ae" title="Sets a value in the database." alt="" coords="200,31,312,57"/>
-<area shape="rect" id="node3" href="$main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="51,5,106,32"/>
-<area shape="rect" id="node4" href="$sdb_8h.html#a2a86f0ae8eaea9297bd3220f2a8ab869" title=" " alt="" coords="5,56,152,83"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="360,31,457,56"/>
+<area shape="rect" id="Node000002" href="$sdb_8h.html#a59a73b6989beba1f08df6a9d1ec9e8ae" title="Sets a value in the database." alt="" coords="200,31,312,56"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="346,46,312,46,312,41,346,41"/>
+<area shape="rect" id="Node000003" href="$main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="51,5,106,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="186,36,106,24,107,19,187,31"/>
+<area shape="rect" id="Node000004" href="$sdb_8h.html#a2a86f0ae8eaea9297bd3220f2a8ab869" title=" " alt="" coords="5,55,152,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="187,55,153,60,152,55,186,50"/>
 </map>

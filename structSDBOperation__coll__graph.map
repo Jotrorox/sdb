@@ -1,4 +1,5 @@
 <map id="SDBOperation" name="SDBOperation">
-<area shape="rect" id="node1" title=" " alt="" coords="5,124,119,151"/>
-<area shape="rect" id="node2" title=" " alt="" coords="31,5,93,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,123,119,148"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="31,5,93,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="65,44,65,123,59,123,59,44"/>
 </map>

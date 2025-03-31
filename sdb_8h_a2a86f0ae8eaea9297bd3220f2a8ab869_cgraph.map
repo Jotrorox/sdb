@@ -1,10 +1,18 @@
 <map id="sdb_batch_execute" name="sdb_batch_execute">
-<area shape="rect" id="node1" title=" " alt="" coords="5,81,152,108"/>
-<area shape="rect" id="node2" href="$sdb_8h.html#a606f05f11750d966b89fccda2a42d7a3" title="Saves the database." alt="" coords="377,56,459,83"/>
-<area shape="rect" id="node6" href="$sdb_8h.html#a59a73b6989beba1f08df6a9d1ec9e8ae" title="Sets a value in the database." alt="" coords="200,107,312,133"/>
-<area shape="rect" id="node3" href="$sdb_8h.html#a06e5ec38763006ac3698d3232a70c37e" title="Compresses data using LZ77&#45;style compression." alt="" coords="525,5,643,32"/>
-<area shape="rect" id="node4" href="$sdb_8h.html#aa5ac13dd5ce8b589b99fb8d55591455c" title="Compresses data using run&#45;length encoding." alt="" coords="529,56,639,83"/>
-<area shape="rect" id="node5" href="$sdb_8h.html#a0c179ece8c7ce27666738d126d88cf9f" title="Helper function to write data to a buffer with automatic resizing." alt="" coords="524,107,644,133"/>
-<area shape="rect" id="node7" href="$sdb_8h.html#a1880aa13e614310d0e2022880bbbec14" title=" " alt="" coords="369,107,467,133"/>
-<area shape="rect" id="node8" href="$sdb_8h.html#a80de05c92ea53a4c3f73991ae28c569d" title="Finds a table in the database." alt="" coords="360,157,476,184"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,80,152,105"/>
+<area shape="rect" id="Node000002" href="$sdb_8h.html#a606f05f11750d966b89fccda2a42d7a3" title="Saves the database." alt="" coords="377,55,459,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="152,85,363,69,363,74,152,90"/>
+<area shape="rect" id="Node000006" href="$sdb_8h.html#a59a73b6989beba1f08df6a9d1ec9e8ae" title="Sets a value in the database." alt="" coords="200,105,312,131"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="152,100,187,105,186,111,152,106"/>
+<area shape="rect" id="Node000003" href="$sdb_8h.html#a41dc88ab89048875a54bfc7bd008ae3b" title="Compresses data using LZ77&#45;style compression." alt="" coords="525,5,643,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="459,53,526,32,528,37,460,58"/>
+<area shape="rect" id="Node000004" href="$sdb_8h.html#a353b821ac4af680892de5414e7c6c2b5" title="Compresses data using run&#45;length encoding." alt="" coords="529,55,639,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="460,65,516,65,516,70,460,70"/>
+<area shape="rect" id="Node000005" href="$sdb_8h.html#a0c179ece8c7ce27666738d126d88cf9f" title="Helper function to write data to a buffer with automatic resizing." alt="" coords="524,104,644,129"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="460,77,528,97,526,102,459,82"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="297,103,363,82,364,87,298,108"/>
+<area shape="rect" id="Node000007" href="$sdb_8h.html#a1880aa13e614310d0e2022880bbbec14" title=" " alt="" coords="369,104,467,129"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="312,115,356,115,356,120,312,120"/>
+<area shape="rect" id="Node000008" href="$sdb_8h.html#a944d00b3fab98ff2ca74e75af155285d" title="Finds a table in the database." alt="" coords="360,153,476,179"/>
+<area shape="poly" id="edge8_Node000006_Node000008" title=" " alt="" coords="300,128,362,147,361,152,299,133"/>
 </map>

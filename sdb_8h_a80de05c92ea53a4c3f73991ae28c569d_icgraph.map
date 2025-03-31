@@ -1,7 +1,0 @@
-<map id="sdb_table_find" name="sdb_table_find">
-<area shape="rect" id="node1" title="Finds a table in the database." alt="" coords="361,31,477,57"/>
-<area shape="rect" id="node2" href="$sdb_8h.html#a33d06c83e2d45ba5fec0560fa933fec9" title="Gets a value from the database." alt="" coords="200,5,313,32"/>
-<area shape="rect" id="node4" href="$sdb_8h.html#a59a73b6989beba1f08df6a9d1ec9e8ae" title="Sets a value in the database." alt="" coords="201,56,313,83"/>
-<area shape="rect" id="node3" href="$main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="51,5,106,32"/>
-<area shape="rect" id="node5" href="$sdb_8h.html#a2a86f0ae8eaea9297bd3220f2a8ab869" title=" " alt="" coords="5,56,152,83"/>
-</map>

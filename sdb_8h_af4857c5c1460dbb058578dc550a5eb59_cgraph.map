@@ -1,5 +1,0 @@
-<map id="sdb_open" name="sdb_open">
-<area shape="rect" id="node1" title="Opens a database file." alt="" coords="5,31,89,57"/>
-<area shape="rect" id="node2" href="$sdb_8h.html#ae6e48bacc3e6a6757a4dc1fdf56f7855" title="Decompresses LZ77 compressed data." alt="" coords="137,5,272,32"/>
-<area shape="rect" id="node3" href="$sdb_8h.html#a9a446288941fb71784a3a1cce823a689" title="Decompresses RLE compressed data." alt="" coords="142,56,267,83"/>
-</map>

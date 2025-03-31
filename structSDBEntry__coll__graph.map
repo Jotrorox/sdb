@@ -1,4 +1,6 @@
 <map id="SDBEntry" name="SDBEntry">
-<area shape="rect" id="node1" title=" " alt="" coords="5,109,88,136"/>
-<area shape="rect" id="node2" title=" " alt="" coords="16,5,77,32"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,108,88,133"/>
+<area shape="poly" id="edge2_Node000001_Node000001" title=" " alt="" coords="103,110,111,114,115,121,106,130,89,133,88,128,104,125,109,120,107,118,101,115"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="16,5,77,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="49,45,49,108,44,108,44,45"/>
 </map>

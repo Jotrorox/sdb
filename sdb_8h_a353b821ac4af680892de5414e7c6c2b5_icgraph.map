@@ -1,0 +1,12 @@
+<map id="rle_compress" name="rle_compress">
+<area shape="rect" id="Node000001" title="Compresses data using run&#45;length encoding." alt="" coords="491,29,600,55"/>
+<area shape="rect" id="Node000002" href="$sdb_8h.html#a606f05f11750d966b89fccda2a42d7a3" title="Saves the database." alt="" coords="360,29,443,55"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="477,45,443,45,443,39,477,39"/>
+<area shape="rect" id="Node000003" href="$sdb_8h.html#a2a86f0ae8eaea9297bd3220f2a8ab869" title=" " alt="" coords="5,5,152,31"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="346,41,152,26,153,21,346,35"/>
+<area shape="rect" id="Node000004" href="$sdb_8h.html#a59a73b6989beba1f08df6a9d1ec9e8ae" title="Sets a value in the database." alt="" coords="200,55,312,80"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="347,54,313,60,312,55,346,49"/>
+<area shape="poly" id="edge5_Node000004_Node000003" title=" " alt="" coords="196,53,125,33,126,28,197,48"/>
+<area shape="rect" id="Node000005" href="$main_8c.html#ae66f6b31b5ad750f1fe042a706a4e3d4" title=" " alt="" coords="51,55,106,80"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="186,70,106,70,106,65,186,65"/>
+</map>
